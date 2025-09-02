@@ -15,6 +15,12 @@
         <li><%= data.country %></li>
         <br>
         <a href="http://localhost:3000/listings/<%= data._id %>/edit">Edit This Listing</a>
+        <br>
+        <br>
+        <form action="/listings/<%= data._id %>?_method=DELETE" method="post" >
+            <button>Delete This Listing</button>
+        </form>
+
     </ul>
 </body>
 </html>
