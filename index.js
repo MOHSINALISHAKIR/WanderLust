@@ -16,6 +16,11 @@ app.use(express.urlencoded({extended:true}))
 connectDb('mongodb://127.0.0.1:27017/wanderlust').then(()=>{
     console.log("connect to db")
 })
+// New Route
+app.get("/listings/new",(req,res)=>{
+    res.render("new.ejs")
+})
+
 // All Listings
 app.get("/listings",async (req,res)=>{
     let data = await Listing.find({});
@@ -28,6 +33,14 @@ app.get("/listings/:id",async(req,res)=>{
     let data = await Listing.findById(id)
     res.render("show.ejs",{data})
 
+})
+
+// Create Listing
+app.post("/listings",async (req,res)=>{
+    
+    let newListing = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect("/listings")
 })
 app.listen(3000,()=>{
     console.log("server started")
