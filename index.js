@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 const path = require("path")
 const methodOverrid = require("method-override")
+const ejsMate = require("ejs-mate")
+app.engine('ejs', ejsMate);
 // connect mongodb
 const connectDb = require("./config/connect")
 const Listing = require("./models/listing")
@@ -10,13 +12,17 @@ const Listing = require("./models/listing")
 app.use(express.json())
 app.set("view engine","ejs")
 app.set("views",path.join(__dirname,"views"))
-app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static(path.join(__dirname,"/public")))
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverrid("_method"))
 
 // connect - db
 connectDb('mongodb://127.0.0.1:27017/wanderlust').then(()=>{
     console.log("connect to db")
+})
+//home route
+app.get("/",(req,res)=>{
+    res.send("welcome to wanderlust")
 })
 // New Route
 app.get("/listings/new",(req,res)=>{
