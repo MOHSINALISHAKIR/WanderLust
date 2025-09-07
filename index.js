@@ -1,11 +1,14 @@
 const express = require("express")
 const app = express()
 const path = require("path")
+// method override
 const methodOverrid = require("method-override")
+// ejsmate
 const ejsMate = require("ejs-mate")
 app.engine('ejs', ejsMate);
 // connect mongodb
 const connectDb = require("./config/connect")
+// lising model
 const Listing = require("./models/listing")
 
 // Middlewares
@@ -14,8 +17,12 @@ app.set("view engine","ejs")
 app.set("views",path.join(__dirname,"views"))
 app.use(express.static(path.join(__dirname,"/public")))
 app.use(express.urlencoded({extended:true}))
+// method override
 app.use(methodOverrid("_method"))
-
+// wrapAsync Function
+const wrapAsync = require("./utils/wrapAsync")
+// ExpressError
+const ExpressError = require("./utils/ExpressError")
 // connect - db
 connectDb('mongodb://127.0.0.1:27017/wanderlust').then(()=>{
     console.log("connect to db")
@@ -30,42 +37,54 @@ app.get("/listings/new",(req,res)=>{
 })
 
 // All Listings
-app.get("/listings",async (req,res)=>{
+app.get("/listings",wrapAsync( async (req,res)=>{
     let data = await Listing.find({});
     res.render("listing.ejs",{data})
     
-})
+}))
 // Show Route
-app.get("/listings/:id",async(req,res)=>{
+app.get("/listings/:id",wrapAsync( async(req,res)=>{
     let {id} = req.params;
     let data = await Listing.findById(id)
     res.render("show.ejs",{data})
 
-})
+}))
 
 // Create Listing
-app.post("/listings",async (req,res)=>{
-    
+app.post("/listings", wrapAsync( async (req,res,next)=>{
+
     let newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings")
-})
+        
+    
+    
+    
+}))
 // Edit Route
-app.get("/listings/:id/edit",async(req,res)=>{
+app.get("/listings/:id/edit",wrapAsync( async(req,res)=>{
     let {id} = req.params;
     let data = await Listing.findById(id);
     res.render("edit.ejs",{data})
-})
+}))
 // update Route
-app.put("/listings/:id",async(req,res)=>{
+app.put("/listings/:id",wrapAsync( async(req,res)=>{
     let {id}= req.params;
-    await Listing.findByIdAndUpdate(id , {...req.body.listing})
+    await Listing.findByIdAndUpdate(id,{...req.body.listing})
     res.redirect("/listings")
-})
-app.delete("/listings/:id",async(req,res)=>{
+}))
+// delete route
+app.delete("/listings/:id",wrapAsync( async(req,res)=>{
     let {id } = req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings")
+}))
+
+
+app.use((err,req,res,next)=>{
+    let {status =500,message='something went wrong'}=err;
+    res.status(status).render("error.ejs", {message});
+
 })
 app.listen(3000,()=>{
     console.log("server started")
