@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-8 offset-2">
       <h3>Edit Listing:-</h3>
-      <form action="/listings/<%= data._id %>?_method=PUT" method="post">
+      <form action="/listings/<%= data._id %>?_method=PUT" method="post" novalidate class="needs-validation">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -13,7 +13,10 @@
             value="<%= data.title %>"
             class="form-control"
             id="title"
+            required
           />
+          <div class="invalid-feedback">Please Enter Title</div>
+
         </div>
 
         <div class="mb-3">
@@ -22,9 +25,12 @@
             name="listing[description]"
             class="form-control"
             id="description"
+            required
           >
 <%= data.description %></textarea
           >
+          <div class="invalid-feedback">Please Enter Description</div>
+
         </div>
 
         <div class="mb-3">
@@ -35,7 +41,10 @@
             value="<%= data.image %>"
             class="form-control"
             id="image"
+            required
           />
+          <div class="invalid-feedback">Please Enter Title</div>
+
         </div>
 
         <div class="mb-3">
@@ -46,7 +55,10 @@
             value="<%= data.price %>"
             class="form-control"
             id="price"
+            required
           />
+          <div class="invalid-feedback">Please Enter Price</div>
+
         </div>
 
         <div>
@@ -57,7 +69,10 @@
             value="<%= data.location %>"
             class="form-control"
             id="location"
+            required
           />
+          <div class="invalid-feedback">Please Enter Location</div>
+
         </div>
 
         <div>
@@ -68,7 +83,10 @@
             value="<%= data.country %>"
             class="form-control"
             id="country"
+            required
           />
+          <div class="invalid-feedback">Please Enter Country</div>
+
         </div>
 
         <br /><br />

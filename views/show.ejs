@@ -1,21 +1,38 @@
 <% layout('/layouts/boilerplate') -%>
 
-
 <body>
-    <h2>See In Details :-</h2>
-    <ul>
-        <li><%= data.title %></li>
-        <li><%= data.description %></li>
-        <li><%= data.price %></li>
-        <li><%= data.location %></li>
-        <li><%= data.country %></li>
-        <br>
-        <a href="http://localhost:3000/listings/<%= data._id %>/edit">Edit This Listing</a>
-        <br>
-        <br>
-        <form action="/listings/<%= data._id %>?_method=DELETE" method="post" >
-            <button>Delete This Listing</button>
-        </form>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h2>See In Details :-</h2>
 
-    </ul>
+      <div class="card">
+        <img
+          src="<%= data.image %>"
+          class="card-img-top"
+          style="height: 60vh"
+          alt="..."
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= data.title %></h5>
+          <p class="card-text">
+            <%= data.description %>
+            <br />
+            Rs : <%= data.price %> pkr
+            <br />
+            <%= data.location %>
+          </p>
+          <a
+            href="http://localhost:3000/listings/<%= data._id %>/edit"
+            class="btn btn-primary"
+            >Edit This</a
+          >
+        </div>
+      </div>
+
+      <form action="/listings/<%= data._id %>?_method=DELETE" method="post">
+        <button class="bg-danger">Delete This Listing</button>
+      </form>
+      <br />
+    </div>
+  </div>
 </body>
