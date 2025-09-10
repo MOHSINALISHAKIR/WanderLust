@@ -10,6 +10,8 @@ app.engine('ejs', ejsMate);
 const connectDb = require("./config/connect")
 // lising model
 const Listing = require("./models/listing")
+// review model
+const Review = require("./models/review")
 
 // Middlewares
 app.use(express.json())
@@ -79,6 +81,17 @@ app.delete("/listings/:id",wrapAsync( async(req,res)=>{
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings")
 }))
+// review route
+app.post("/listings/:id/reviews",async (req,res)=>{
+
+    let listing = await Listing.findById(req.params.id);
+    let newReview = await new Review(req.body.review)
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save()
+    res.redirect(`/listings/${listing._id}`);
+    
+})
 
 
 app.use((err,req,res,next)=>{
