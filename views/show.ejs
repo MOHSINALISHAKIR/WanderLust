@@ -3,7 +3,7 @@
 <body>
   <div class="row">
     <div class="col-8 offset-2">
-      <h2>See In Details :-</h2>
+      <h2><%= data.title %></h2>
 
       <div class="card">
         <img
@@ -13,7 +13,7 @@
           alt="..."
         />
         <div class="card-body">
-          <h5 class="card-title"><%= data.title %></h5>
+          <!-- <h5 class="card-title"></h5> -->
           <p class="card-text">
             <%= data.description %>
             <br />
@@ -33,6 +33,27 @@
         <button class="bg-danger">Delete This Listing</button>
       </form>
       <br />
+    <hr>
+
+    </div>
+    <div class="col-8 offset-2">
+      <h4>Leave A Review</h4>
+      <form action="">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <input type="range" min="1" max="5" name="review[rating]" class="form-range">
+        </div>
+        <div class="mb-3">
+
+        <label for="comment" class="form-label">Review</label>
+        <textarea name="review[comment]" id="" cols="30" rows="5" class="form-control"></textarea>
+        </div>
+        <button class="btn btn-outline-dark">Submit</button>
+
+
+      </form>
+      <br>
+
     </div>
   </div>
 </body>
