@@ -33,27 +33,52 @@
         <button class="bg-danger">Delete This Listing</button>
       </form>
       <br />
-    <hr>
-
+      <hr />
     </div>
     <div class="col-8 offset-2">
       <h4>Leave A Review</h4>
       <form method="post" action="/listings/<%= data._id %>/reviews">
         <div class="mb-3">
           <label for="rating" class="form-label">Rating</label>
-          <input type="range" min="1" max="5" name="review[rating]" class="form-range">
+          <input
+            type="range"
+            min="1"
+            max="5"
+            name="review[rating]"
+            class="form-range"
+          />
         </div>
         <div class="mb-3">
-
-        <label for="comment" class="form-label">Review</label>
-        <textarea name="review[comment]" id="" cols="30" rows="5" class="form-control"></textarea>
+          <label for="comment" class="form-label">Review</label>
+          <textarea
+            name="review[comment]"
+            id=""
+            cols="30"
+            rows="5"
+            class="form-control"
+          ></textarea>
         </div>
         <button class="btn btn-outline-dark">Submit</button>
-
-
       </form>
-      <br>
-
+      <br />
     </div>
+    <hr />
+    <h4><b>All Reviews</b></h4>
+    
+      <% for( review of data.reviews ) { %>
+
+      <div class="card col-5 offset-2 ms-3 mb-3 border">
+        <div class="card-body">
+          <h4 class="card-title">Mohsin</h4>
+          <p class="card-text"><%= review.comment %></p>
+          <p class="card-text"><%= review.rating %> stars</p>
+        </div>
+        <form method="post" action="/listings/<%= data._id %>/reviews/<%= review._id %>?_method=DELETE">
+          <button class="btn btn-sm btn-dark mb-3">Delete</button>
+        </form>
+      </div>
+
+      <% } %>
+    
   </div>
 </body>
