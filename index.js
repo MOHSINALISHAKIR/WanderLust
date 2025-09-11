@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const path = require("path")
+const listing = require("./routes/listing")
 // method override
 const methodOverrid = require("method-override")
 // ejsmate
@@ -33,54 +34,7 @@ connectDb('mongodb://127.0.0.1:27017/wanderlust').then(()=>{
 app.get("/",(req,res)=>{
     res.send("welcome to wanderlust")
 })
-// New Route
-app.get("/listings/new",(req,res)=>{
-    res.render("new.ejs")
-})
 
-// All Listings
-app.get("/listings",wrapAsync( async (req,res)=>{
-    let data = await Listing.find({});
-    res.render("listing.ejs",{data})
-    
-}))
-// Show Route
-app.get("/listings/:id",wrapAsync( async(req,res)=>{
-    let {id} = req.params;
-    let data = await Listing.findById(id).populate("reviews");
-    res.render("show.ejs",{data})
-
-}))
-
-// Create Listing
-app.post("/listings", wrapAsync( async (req,res,next)=>{
-
-    let newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings")
-        
-    
-    
-    
-}))
-// Edit Route
-app.get("/listings/:id/edit",wrapAsync( async(req,res)=>{
-    let {id} = req.params;
-    let data = await Listing.findById(id);
-    res.render("edit.ejs",{data})
-}))
-// update Route
-app.put("/listings/:id",wrapAsync( async(req,res)=>{
-    let {id}= req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing})
-    res.redirect("/listings")
-}))
-// delete route
-app.delete("/listings/:id",wrapAsync( async(req,res)=>{
-    let {id } = req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect("/listings")
-}))
 // review route
 app.post("/listings/:id/reviews",async (req,res)=>{
 
@@ -99,6 +53,7 @@ app.delete("/listings/:id/reviews/:reviewId",wrapAsync( async(req,res)=>{
     await Review.findByIdAndDelete(reviewId)
     res.redirect(`/listings/${id}`)
 }))
+app.use("/listings",listing)
 
 
 app.use((err,req,res,next)=>{
